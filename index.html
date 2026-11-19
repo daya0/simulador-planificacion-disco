@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simulador de Planificación de Disco - UNIBE</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <!-- Encabezado -->
+    <header class="card header-card">
+      <div>
+        <h1>💿 Simulador de Planificación de Disco</h1>
+        <p class="subtitle">Almacenamiento Secundario y Algoritmos del Cabezal - UNIBE</p>
+      </div>
+      <span class="badge-header">Visualizador de Cilindros</span>
+    </header>
+
+    <!-- Panel de Configuración -->
+    <section class="card controls-card">
+      <div class="grid-controls">
+        <div class="form-group">
+          <label for="algoritmo">Algoritmo del Cabezal:</label>
+          <select id="algoritmo">
+            <option value="FCFS">FCFS (First-Come, First-Served)</option>
+            <option value="SSTF">SSTF (Shortest Seek Time First)</option>
+            <option value="SCAN">SCAN (Algoritmo del Ascensor)</option>
+            <option value="LOOK">LOOK (Ascensor Optimizado)</option>
+            <option value="C-SCAN" selected>C-SCAN (Circular SCAN)</option>
+            <option value="C-LOOK">C-LOOK (Circular LOOK)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="inicio">Posición Inicial del Cabezal:</label>
+          <input type="number" id="inicio" value="53" min="0" />
+        </div>
+
+        <div class="form-group">
+          <label for="direccion">Dirección Inicial:</label>
+          <select id="direccion">
+            <option value="up" selected>Hacia arriba (Cilindros crecientes)</option>
+            <option value="down">Hacia abajo (Cilindros decrecientes)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="totalCilindros">Total de Cilindros (0 a N-1):</label>
+          <input type="number" id="totalCilindros" value="200" min="10" max="2000" />
+        </div>
+      </div>
+
+      <div class="form-group full-width">
+        <label for="cola">Cola de Peticiones de Cilindros (separadas por coma):</label>
+        <input type="text" id="cola" value="98, 183, 37, 122, 14, 124, 65, 67" />
+      </div>
+
+      <div class="buttons-row">
+        <button id="btnClasico" class="btn btn-primary">🔄 Cargar Ejercicio Clásico (Silberschatz)</button>
+        <button id="btnAleatorio" class="btn btn-secondary">🎲 Generar Peticiones Aleatorias</button>
+      </div>
+    </section>
+
+    <!-- Gráfica de Trayectoria -->
+    <section class="card chart-card">
+      <div class="chart-header">
+        <h2>📈 Trayectoria del Cabezal (Desplazamiento por Cilindros)</h2>
+        <span class="chart-hint">Eje horizontal: Cilindros [0 – Max] | Eje vertical: Secuencia de pasos ↓</span>
+      </div>
+      <div class="canvas-wrapper">
+        <canvas id="canvasTrayectoria" width="1100" height="380"></canvas>
+      </div>
+    </section>
+
+    <!-- Tarjetas de Resultados -->
+    <section class="metrics-grid">
+      <div class="card metric-card">
+        <span class="metric-title">CILINDROS TOTALES RECORRIDOS</span>
+        <strong id="metricTotal" class="metric-value text-cyan">0 cil.</strong>
+      </div>
+      <div class="card metric-card">
+        <span class="metric-title">PROMEDIO POR PETICIÓN</span>
+        <strong id="metricPromedio" class="metric-value text-purple">0.0</strong>
+      </div>
+      <div class="card metric-card">
+        <span class="metric-title">ESTADO DE INANICIÓN (RISK)</span>
+        <strong id="metricInanicion" class="metric-value text-green">Bajo</strong>
+      </div>
+    </section>
+
+    <!-- Log Paso a Paso -->
+    <section class="card log-section">
+      <h3>Secuencia de Movimiento Paso a Paso:</h3>
+      <div id="logContainer" class="log-box"></div>
+    </section>
+
+    <!-- Tabla Comparativa -->
+    <section class="card table-card">
+      <h2>🏆 Comparativa Simultánea de Todos los Algoritmos</h2>
+      <p class="subtitle">Calculados exactamente con la misma cola de peticiones y posición inicial:</p>
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>ALGORITMO</th>
+              <th>CILINDROS RECORRIDOS</th>
+              <th>PROMEDIO / PETICIÓN</th>
+              <th>COMPORTAMIENTO</th>
+              <th>EVALUACIÓN</th>
+            </tr>
+          </thead>
+          <tbody id="tablaComparativa"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
